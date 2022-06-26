@@ -1,4 +1,4 @@
-import { jwtGenerate } from "./jwtGenerate";
+import { generateJWT } from "./generateJWT";
 import { emailExist } from "./emailExists";
 
-export { jwtGenerate, emailExist };
+export { generateJWT, emailExist };
