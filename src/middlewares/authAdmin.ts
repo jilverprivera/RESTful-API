@@ -7,20 +7,18 @@ export const authAdmin = async (
   next: NextFunction
 ) => {
   if (!req.user) {
-    res.status(500).json({
+    res.status(400).json({
       message: "First validate using Token.",
     });
   }
-  const { name, id } = req.user;
+  const { id } = req.user;
 
   const user = await User.findOne({
     _id: id,
   });
   if (user) {
     if (user.role !== 1) {
-      res
-        .status(400)
-        .json({ ok: false, message: `User ${name} doesn't have Admin role.` });
+      res.status(403).json({ message: "User doesn't have Admin role." });
     }
   }
   next();
