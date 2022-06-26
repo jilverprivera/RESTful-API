@@ -2,16 +2,17 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 
 import { User } from "../models";
-import { jwtGenerate } from "../helpers";
+import { generateJWT } from "../helpers";
+import { SignInInterface, SignUpInterface } from "../interfaces/auth";
 
 export const authController = {
   signup: async (req: Request, res: Response) => {
-    const { name, email, password } = req.body;
+    const { name, email, password }: SignUpInterface = req.body;
     try {
       const newUser = new User({ name, email, password });
       newUser.password = await bcrypt.hash(password, 10);
       await newUser.save();
-      const token = await jwtGenerate(String(newUser._id));
+      const token = await generateJWT(String(newUser._id));
       return res.status(201).json({
         message: `User with email: ${email} has been created successfully.`,
         token,
@@ -24,7 +25,7 @@ export const authController = {
   },
 
   signin: async (req: Request, res: Response) => {
-    const { email, password } = req.body;
+    const { email, password }: SignInInterface = req.body;
     try {
       const user = await User.findOne({ email });
       if (!user) {
@@ -36,8 +37,8 @@ export const authController = {
           .status(400)
           .json({ message: "User or password aren't correct." });
       }
-      const token = await jwtGenerate(String(user._id));
-      return res.status(200).json({ token });
+      const token = await generateJWT(String(user._id));
+      return res.status(200).json({ user, token });
     } catch (err) {
       return res
         .status(500)
