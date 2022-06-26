@@ -1,27 +1,21 @@
 import express from "express";
-import { userController } from "../controllers";
 
-// import { emailExist } from "../helpers";
-// import { authController } from "../controllers/auth";
-// import { validateFields } from "../middlewares";
+import { userController } from "../controllers";
+import { authAdmin, tokenValidation } from "../middlewares";
 
 const router = express.Router();
 
-// router.post(
-//   "/auth/admin/register",
-//   check("name", "name is required").not().isEmpty(),
-//   check("email", "Email is incorrect.").isEmail(),
-//   check("email").custom(emailExist),
-//   check("password", "Password must be at least 6 characters.").isLength({
-//     min: 6,
-//   }),
-//   check("password", "Passwords are not equals").equals("password2"),
-//   // TokenJWTValidate,
-//   // authAdmin,
-//   validateFields,
-//   authController.admin_register
-// );
+router.route("/users").get(tokenValidation, authAdmin, userController.getUsers);
 
-router.get("/", userController.getUsers);
+router
+  .route("/user/:id")
+  .put(tokenValidation, authAdmin, userController.updateUserByID)
+  .delete(tokenValidation, authAdmin, userController.removeUserByID);
+
+router.get("/user/info", tokenValidation, userController.getUserByID);
+router.get("/user/re_new", tokenValidation, userController.reValidateToken);
+router.get("/user/payment", tokenValidation, userController.getHistoryPayment);
+router.patch("/user/add_cart", tokenValidation, userController.addToCartList);
+router.patch("/user/wish_list", tokenValidation, userController.addToWishList);
 
 export default router;
