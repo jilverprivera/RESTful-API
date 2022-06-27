@@ -1,4 +1,4 @@
-import { User } from "../models";
+import { User } from "../api/users/model";
 
 export const emailExist = async (email: string) => {
   const emailDB = await User.findOne({ email });
