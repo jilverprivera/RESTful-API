@@ -9,7 +9,7 @@ const connectDB = () => {
     throw new Error("Couldn't access to DB.");
   }
   mongoose.connect(connectionURL);
-  console.log("DB connection: Active.");
+  NODE_ENV === "development" && console.log("DB: Active.");
 };
 
 export default connectDB;
