@@ -1,8 +1,9 @@
-import { v2 } from "cloudinary";
 import fs from "fs";
-
-import dotenv from "dotenv";
 import { Request, Response } from "express";
+import dotenv from "dotenv";
+import { v2 } from "cloudinary";
+
+import { File } from "../interfaces/fileInterface";
 dotenv.config();
 
 const {
@@ -15,35 +16,36 @@ v2.config({
   cloud_name: String(CLOUDINARY_CLOUD_NAME),
   api_key: String(CLOUDINARY_CLOUD_API_KEY),
   api_secret: String(CLOUDINARY_CLOUD_API_SECRET),
-  secure: true,
 });
 
 export const imageController = {
-  uploadImage: (req: any, res: Response) => {
+  uploadImage: (req: Request, res: Response) => {
     try {
-      const file = req.files.file;
+      const { file }: any = req.files;
+      console.log(file);
+      const { tempFilePath, size, mimetype }: File = file;
       if (!req.files || Object.keys(req.files).length === 0) {
         return res.status(400).json({ message: "No images selected." });
       }
-      if (file.size > 1024 * 1024) {
-        removeTmpFiles(file.tempFilePath);
+      if (size > 1024 * 1024) {
+        removeTmpFiles(tempFilePath);
         return res.status(400).json({ message: "Image size is too large." });
       }
       if (
-        file.mimetype !== "image/jpeg" &&
-        file.mimetype !== "image/webp" &&
-        file.mimetype !== "image/png"
+        mimetype !== "image/jpeg" &&
+        mimetype !== "image/webp" &&
+        mimetype !== "image/png"
       ) {
-        removeTmpFiles(file.tempFilePath);
+        removeTmpFiles(tempFilePath);
         return res.status(400).json({ message: "Incorrect image format" });
       }
       return v2.uploader.upload(
-        file.tempFilePath,
+        tempFilePath,
         { folder: "tech-ecommerce" },
         (err, result) => {
           if (err) throw err;
-          removeTmpFiles(file.tempFilePath);
-          return res.status(200).json({
+          removeTmpFiles(tempFilePath);
+          res.status(200).json({
             result,
           });
         }
