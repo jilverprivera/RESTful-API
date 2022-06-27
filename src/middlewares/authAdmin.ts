@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { User } from "../models";
+import { User } from "../api/users/model";
 
 export const authAdmin = async (
   req: any,

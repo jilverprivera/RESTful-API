@@ -1,6 +1,6 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv";
-import { User } from "../models";
+import { User } from "../api/users/model";
 
 dotenv.config();
 const { ACCESS_TOKEN_SECRET_SEED } = process.env;
