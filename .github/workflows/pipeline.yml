@@ -7,7 +7,7 @@ jobs:
   avoid_redundancy:
     runs-on: ubuntu-18.04
     steps:
-      - name: Cancel previous workflow
+      - name: Cancel previous redundants workflows
         uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
@@ -28,3 +28,20 @@ jobs:
 
       - name: "Lint"
         run: npm run eslint
+
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14
+
+      - name: "Install dependencies"
+        run: npm install
+
+      - name: "Testing"
+        run: npm run test
