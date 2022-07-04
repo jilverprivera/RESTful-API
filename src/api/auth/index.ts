@@ -1,8 +1,8 @@
 import express from "express";
-import { check } from "express-validator";
-import { authController } from "./controller";
-import { emailExist } from "../../helpers";
-import { validateFields } from "../../middlewares";
+import {check} from "express-validator";
+import {authController} from "./controller";
+import {emailExist} from "../../helpers";
+import {validateFields} from "../../middlewares";
 
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post(
   }),
   check("password", "Passwords are not equals").not().equals("password2"),
   validateFields,
-  authController.signup
+  authController.signup,
 );
 
 router.post(
@@ -26,7 +26,7 @@ router.post(
     min: 6,
   }),
   validateFields,
-  authController.signin
+  authController.signin,
 );
 
 export default router;

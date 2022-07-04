@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import {Schema, model} from "mongoose";
 
 const categorySchema = new Schema(
   {
@@ -8,12 +8,16 @@ const categorySchema = new Schema(
       trim: true,
       unique: true,
     },
+    image: {
+      type: Object,
+      required: true,
+    },
   },
-  { timestamps: true }
+  {timestamps: true},
 );
 
 categorySchema.methods.toJSON = function () {
-  const { ...data } = this.toObject();
+  const {...data} = this.toObject();
   return data;
 };
 

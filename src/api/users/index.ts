@@ -1,7 +1,7 @@
 import express from "express";
 
-import { userController } from "./controller";
-import { authAdmin, tokenValidation } from "../../middlewares";
+import {userController} from "./controller";
+import {authAdmin, tokenValidation} from "../../middlewares";
 
 const router = express.Router();
 
@@ -12,9 +12,8 @@ router
   .put(tokenValidation, authAdmin, userController.updateUserByID)
   .delete(tokenValidation, authAdmin, userController.removeUserByID);
 
-router.get("/user/info", tokenValidation, userController.getUserByID);
+router.get("/user/info", tokenValidation, userController.getUserInformation);
 router.get("/user/re_new", tokenValidation, userController.reValidateToken);
-// router.get("/user/payment", tokenValidation, userController.getHistoryPayment);
 router.patch("/user/add_cart", tokenValidation, userController.addToCartList);
 router.patch("/user/wish_list", tokenValidation, userController.addToWishList);
 

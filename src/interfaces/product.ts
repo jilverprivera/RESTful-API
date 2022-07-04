@@ -1,17 +1,17 @@
 export interface ProductInterface {
-  product_id: string;
+  product_id?: string;
   name: string;
   price: number;
   description: string;
   content: string;
-  images: Images;
+  image: Image;
   category: string;
   checked: boolean;
   sold: number;
   stock: number;
 }
 
-export interface Images {
+export interface Image {
   public_id: string;
   url: string;
 }

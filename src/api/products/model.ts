@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import {Schema, model} from "mongoose";
 
 const productSchema = new Schema(
   {
@@ -26,7 +26,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    images: {
+    image: {
       type: Object,
       required: true,
     },
@@ -48,11 +48,11 @@ const productSchema = new Schema(
       default: 0,
     },
   },
-  { timestamps: true }
+  {timestamps: true},
 );
 
 productSchema.methods.toJSON = function () {
-  const { ...data } = this.toObject();
+  const {...data} = this.toObject();
   return data;
 };
 

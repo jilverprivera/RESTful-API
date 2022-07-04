@@ -1,4 +1,5 @@
 import express from "express";
+
 import { imageController } from "./controller";
 
 const router = express.Router();

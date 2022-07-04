@@ -1,8 +1,9 @@
 import express from "express";
 
-const router = express.Router();
 import { tokenValidation, authAdmin } from "../../middlewares";
 import { paymentController } from "./controller";
+
+const router = express.Router();
 
 router
   .route("/")
