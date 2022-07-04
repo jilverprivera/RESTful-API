@@ -1,44 +1,40 @@
-import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
-import fileUpload from "express-fileupload";
+import app from "./app";
 import dotenv from "dotenv";
-
-import connectDB from "./db";
-
-import userRoute from "./api/users";
-import authRoutes from "./api/auth";
-import categoryRoutes from "./api/categories";
-import productRoutes from "./api/products";
-import imageRoutes from "./api/images";
-import paymentRoutes from "./api/payments";
+import mongoose from "mongoose";
 
 dotenv.config();
-const { PORT, NODE_ENV } = process.env;
 
-const app = express();
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors());
-app.use(
-  fileUpload({
-    useTempFiles: true,
-  })
-);
+const {MONGODB_URL, MONGODB_URL_TEST, NODE_ENV, PORT} = process.env;
 
-connectDB();
+const connectionURL = NODE_ENV === "test" ? MONGODB_URL_TEST : MONGODB_URL;
 
-app.use("/auth", authRoutes); // -> /auth/signin | /auth/signup
-app.use("/api", userRoute); // -> /api/users | /api/user | /api/user/:id
-app.use("/api", categoryRoutes); // -> /api/categories | /api/category | /api/category/:id
-app.use("/api", productRoutes); // -> /api/products | /api/product | /api/product/:id
-app.use("/api/image", imageRoutes); // -> /api/image/upload | /api/image/remove
-app.use("/api/payments", paymentRoutes); // -> /api/payment/
+if (!connectionURL) {
+  throw new Error("Couldn't access to DB.");
+}
+mongoose.connect(connectionURL);
 
-const APP_PORT = PORT || 5000;
-app.listen(APP_PORT, () => {
-  NODE_ENV === "development" && console.log(`Port: ${APP_PORT}.`);
-  NODE_ENV === "development" && console.log("Server: Active.");
-});
+NODE_ENV === "development" && console.log("DB: Active.");
 
-export { app };
+export const serverStart = (DEV_PORT?: number) => {
+  if (NODE_ENV === "test") {
+    const server = app.listen(PORT, () => {
+      console.log("Server: Active.");
+    });
+    return server;
+  }
+  if (NODE_ENV === "development") {
+    const server = app.listen(DEV_PORT, () => {
+      console.log("MODE: Development");
+      console.log(`Port: ${APP_PORT}.`);
+    });
+    return server;
+  }
+
+  const APP_PORT = PORT || DEV_PORT;
+  const server = app.listen(APP_PORT, () => {
+    console.log("MODE: Production");
+    console.log(`Running on: ${APP_PORT}.`);
+  });
+  return server;
+};
+serverStart(5000);
