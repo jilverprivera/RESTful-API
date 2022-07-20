@@ -2,7 +2,7 @@ import {Request, Response} from "express";
 import {Category} from "./model";
 
 export const categoriesController = {
-  getCategories: async (_request: Request, res: Response) => {
+  getCategories: async (_req: Request, res: Response) => {
     try {
       const categories = await Category.find();
       if (!categories) {

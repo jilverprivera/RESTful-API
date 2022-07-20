@@ -5,7 +5,7 @@
   "main": "/build/src/index.js",
   "scripts": {
     "tsc": "tsc",
-    "start": "cross-env NODE_ENV=production npm run tsc && node build/src/index.js",
+    "start": "npm run tsc && node build/src/index.js",
     "dev": "cross-env NODE_ENV=development ts-node-dev src/index.ts",
     "eslint": "eslint  --fix . --ext .ts",
     "test": "cross-env NODE_ENV=test jest --verbose --silent",
