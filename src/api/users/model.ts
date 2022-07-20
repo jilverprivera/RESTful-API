@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import {Schema, model} from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -28,12 +28,18 @@ const userSchema = new Schema(
       type: Array,
       default: [],
     },
+    wishList: {
+      type: Array,
+      default: [],
+    },
   },
-  { timestamps: true }
+  {timestamps: true},
 );
 
 userSchema.methods.toJSON = function () {
-  const { ...user } = this.toObject();
+  const {...user} = this.toObject();
+  delete user.__v;
+  delete user.password;
   return user;
 };
 

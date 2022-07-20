@@ -1,21 +1,14 @@
 import app from "./app";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
+import connectDB from "./db";
 
 dotenv.config();
 
-const {MONGODB_URL, MONGODB_URL_TEST, NODE_ENV, PORT} = process.env;
-
-const connectionURL = NODE_ENV === "test" ? MONGODB_URL_TEST : MONGODB_URL;
-
-if (!connectionURL) {
-  throw new Error("Couldn't access to DB.");
-}
-mongoose.connect(connectionURL);
-
-NODE_ENV === "development" && console.log("DB: Active.");
+const {NODE_ENV, PORT} = process.env;
 
 export const serverStart = (DEV_PORT?: number) => {
+  connectDB();
+  const APP_PORT = PORT || DEV_PORT;
   if (NODE_ENV === "test") {
     const server = app.listen(PORT, () => {
       console.log("Server: Active.");
@@ -30,11 +23,11 @@ export const serverStart = (DEV_PORT?: number) => {
     return server;
   }
 
-  const APP_PORT = PORT || DEV_PORT;
   const server = app.listen(APP_PORT, () => {
     console.log("MODE: Production");
     console.log(`Running on: ${APP_PORT}.`);
   });
   return server;
 };
+
 serverStart(5000);

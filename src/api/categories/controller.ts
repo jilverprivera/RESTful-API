@@ -35,13 +35,13 @@ export const categoriesController = {
   getCategoryByID: async (req: Request, res: Response) => {
     try {
       const {id} = req.params;
-      const catetory = await Category.findById(id);
-      if (!catetory) {
+      const category = await Category.findById(id);
+      if (!category) {
         return res
           .status(400)
           .json({message: `Category with ID: ${id} not found.`});
       }
-      return res.status(200).json({catetory});
+      return res.status(200).json(category);
     } catch (err) {
       return res
         .status(500)

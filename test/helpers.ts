@@ -1,22 +1,30 @@
-import mongoose from "mongoose";
+import {disconnect} from "mongoose";
 import request from "supertest";
 
 import {serverStart} from "../src";
 import app from "../src/app";
+import connectDB from "../src/db";
 import {CategoryInterface} from "../src/interfaces/categories";
 import {ProductInterface} from "../src/interfaces/product";
 
-const api = request(app);
+export const api = request(app);
 // USER
-export const initialSignupData = {
-  name: "test_1",
-  email: "test_1@gmail.com",
+export const initialSignIn = {
+  name: "test_admin",
+  email: "test_admin@admin.com",
   password: "123456789",
   password2: "123456789",
+  role: 1,
 };
+
+export const signinData = {
+  email: "test_admin@admin.com",
+  password: "123456789",
+};
+
 export const signupData = {
-  name: "test_2",
-  email: "test_2@gmail.com",
+  name: "testAdmin2",
+  email: "testAdmin_2@gmail.com",
   password: "123456789",
   password2: "123456789",
 };
@@ -24,11 +32,6 @@ export const signupWithoutEmail = {
   name: "test_2",
   password: "123456789",
   password2: "123456789",
-};
-
-export const signinData = {
-  email: "test_1@gmail.com",
-  password: "123456789",
 };
 
 // CATEGORIES
@@ -107,8 +110,7 @@ export const getAllProductsDB = async () => {
   };
 };
 
-export const serverOut = () => {
-  const server = serverStart();
-  mongoose.connection.close();
-  server.close();
+export const closeServer = async () => {
+  await connectDB().then(() => disconnect());
+  serverStart().close();
 };

@@ -24,7 +24,7 @@ export const userController = {
         return res.status(400).json({message: "Error with token generation."});
       }
       const newToken = await generateJWT(uid);
-      return res.json({newToken});
+      return res.json({token: newToken});
     } catch (err) {
       return res
         .status(500)
@@ -105,17 +105,13 @@ export const userController = {
   },
 
   addToCartList: async (req: any, res: Response) => {
+    console.log(req.body);
     try {
       const user = await User.findById(req.user.id);
       if (!user) {
         return res.status(400).json({message: "User doesn't exist."});
       }
-      await User.findByIdAndUpdate(
-        {_id: req.user.id},
-        {
-          cart: req.body.cart,
-        },
-      );
+      await User.findByIdAndUpdate({_id: req.user.id}, {cart: req.body.cart});
       return res.json({message: "Added to cart"});
     } catch (err) {
       return res
@@ -125,6 +121,7 @@ export const userController = {
   },
 
   addToWishList: async (req: any, res: Response) => {
+    console.log(req.body);
     try {
       const user = await User.findById(req.user.id);
       if (!user) {
@@ -132,9 +129,7 @@ export const userController = {
       }
       await User.findByIdAndUpdate(
         {_id: req.user.id},
-        {
-          wish: req.body.wish,
-        },
+        {wishList: req.body.wishlist},
       );
       return res.status(200).json({message: "Added item to wish list"});
     } catch (err) {

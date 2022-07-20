@@ -53,6 +53,7 @@ const productSchema = new Schema(
 
 productSchema.methods.toJSON = function () {
   const {...data} = this.toObject();
+  delete data.__v;
   return data;
 };
 

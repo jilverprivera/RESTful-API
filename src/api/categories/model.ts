@@ -18,6 +18,7 @@ const categorySchema = new Schema(
 
 categorySchema.methods.toJSON = function () {
   const {...data} = this.toObject();
+  delete data.__v;
   return data;
 };
 
